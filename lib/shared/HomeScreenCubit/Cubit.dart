@@ -1,11 +1,11 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:untitled2/Modules/ArchiveScreen.dart';
-import 'package:untitled2/Modules/DoneScreen.dart';
-import 'package:untitled2/Modules/TaskScreen.dart';
+import 'package:untitled2/Modules/TodoAppScreens/ArchiveScreen.dart';
+import 'package:untitled2/Modules/TodoAppScreens/TaskScreen.dart';
 import 'package:untitled2/shared/HomeScreenCubit/Stetes.dart';
 import 'package:sqflite/sqflite.dart';
+
+import '../../Modules/TodoAppScreens/DoneScreen.dart';
 
 class AppCubit extends Cubit<AppStets> {
   AppCubit() : super(AppInitialState());
@@ -14,7 +14,7 @@ class AppCubit extends Cubit<AppStets> {
   List<Map> newTasks = [];
   List<Map> doneTasks = [];
   List<Map> archiveTasks = [];
-  bool isBottomSheetOpened = true;
+  bool isBottomSheetOpened = false;
   IconData fabIcon = Icons.edit;
 
   int bnbSelected = 0;
@@ -33,8 +33,7 @@ class AppCubit extends Cubit<AppStets> {
       onCreate: (database, version) {
         print('database Created');
 
-        database
-            .execute('CREATE TABLE tasks'
+        database.execute('CREATE TABLE tasks'
                 ' (id INTEGER PRIMARY KEY,'
                 ' title TEXT , date TEXT ,'
                 ' time TEXT,'

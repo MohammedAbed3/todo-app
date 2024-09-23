@@ -50,6 +50,37 @@ class HomeLayout extends StatelessWidget {
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
                   if (cubit.isBottomSheetOpened) {
+
+                    if (fromKey.currentState!.validate()) {
+                      // insertIntoDatabase(
+                      //   titleController.text,
+                      //   dateController.text,
+                      //   timeController.text,
+                      // ).then(
+                      //
+                      //       (value) {
+                      //     getDateFromDatabase(database).then((value) {
+                      //       Navigator.pop(context);
+                      //
+                      //
+                      //       // setState(() {
+                      //       //   tasksList =value;
+                      //       //   print(tasksList);
+                      //       //   isBottomSheetOpened = true;
+                      //       // });
+                      //
+                      //     },);
+                      //
+                      //   },
+                      // ).catchError((onError) {
+                      //   print('error in $onError');
+                      // });
+                      cubit.insertIntoDatabase(
+                          titleController.text,
+                          dateController.text,
+                          timeController.text);
+                    }
+                  } else {
                     scaffoldKey.currentState?.showBottomSheet((context) => Container(
                       width: double.infinity,
                       color: Colors.blueGrey[300],
@@ -167,43 +198,13 @@ class HomeLayout extends StatelessWidget {
                     )).closed.then(
                           (value) {
 
-                            cubit.changeBottomSheetState(true, Icons.edit);
+                        cubit.changeBottomSheetState(false, Icons.edit);
                       },
                     );
 
-                    cubit.changeBottomSheetState(false, Icons.add);
+                    cubit.changeBottomSheetState(true, Icons.add);
 
 
-                  } else {
-                    if (fromKey.currentState!.validate()) {
-                      // insertIntoDatabase(
-                      //   titleController.text,
-                      //   dateController.text,
-                      //   timeController.text,
-                      // ).then(
-                      //
-                      //       (value) {
-                      //     getDateFromDatabase(database).then((value) {
-                      //       Navigator.pop(context);
-                      //
-                      //
-                      //       // setState(() {
-                      //       //   tasksList =value;
-                      //       //   print(tasksList);
-                      //       //   isBottomSheetOpened = true;
-                      //       // });
-                      //
-                      //     },);
-                      //
-                      //   },
-                      // ).catchError((onError) {
-                      //   print('error in $onError');
-                      // });
-                      cubit.insertIntoDatabase(
-                          titleController.text,
-                          dateController.text,
-                          timeController.text);
-                    }
                   }
                 },
                 child:  Icon(cubit.fabIcon),
