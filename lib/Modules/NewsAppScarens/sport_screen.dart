@@ -14,16 +14,9 @@ class sport_screen extends StatelessWidget {
       body: BlocConsumer<NewsCubit,NewsStates>(
         builder:(context, state) {
           NewsCubit cubit = NewsCubit.get(context);
-          return ConditionalBuilder(
-            condition: state is! NewsGetSportsLoadingStates ,
-            builder: (context) => ListView.separated(
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (context, index) => buildArticleItem(cubit.sports[index]),
-              itemCount: cubit.sports.length,
-              separatorBuilder: (context, index) => SizedBox(height: 10,),
-            ),
-            fallback: (context) => Center(child: CircularProgressIndicator()),
-          );
+          List list = cubit.sports;
+
+          return articleBuilder(list, context);
         } ,
         listener:(context, state) {
 

@@ -8,6 +8,7 @@ import 'package:untitled2/Modules/NewsAppScarens/business_screen.dart';
 import 'package:untitled2/Modules/NewsAppScarens/sciences_screen.dart';
 import 'package:untitled2/Modules/NewsAppScarens/settings_screen.dart';
 import 'package:untitled2/Modules/NewsAppScarens/sport_screen.dart';
+import 'package:untitled2/shared/Networks/local/CacheHelper.dart';
 import 'package:untitled2/shared/Networks/remote/dio_helper.dart';
 
 class NewsCubit extends Cubit<NewsStates>{
@@ -20,7 +21,6 @@ class NewsCubit extends Cubit<NewsStates>{
     business_screen(),
     sport_screen(),
     sciences_screen(),
-    settings_screen(),
   ];
 
   List<BottomNavigationBarItem> bottomNavItem = [
@@ -36,48 +36,62 @@ class NewsCubit extends Cubit<NewsStates>{
       icon: Icon(Icons.science_sharp),
       label: 'Sciences'
     ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.settings),
-      label: 'Settings'
-    ),
+
     ];
 
 
   int currentIndex = 0;
 
-  void changeBottomNav(int index){
-    currentIndex = index;
+  bool isDark = false;
 
-    if(index ==1){
-      getSportsData();
+  void changeMode({bool? fromShared}){
+
+    if(fromShared != null){
+      isDark = fromShared;
+
+    }else{
+      isDark = !isDark;
+      CacheHelper.putBoolean(key: 'isDark', value: isDark).then((value) {
+        emit(NewsChangeModeStates());
+
+      },);
     }
-    if(index ==2){
-      getSciencesData();
-    }
-    emit(NewsChangeBottomNavState());
+
   }
+
+  void changeBottomNav(int index) {
+    currentIndex = index;
+    emit(NewsChangeBottomNavState()); // إصدار الحالة لتغيير التبويب
+
+    if (index == 1) {
+      getSportsData(); // بعد إصدار الحالة، قم بجلب بيانات الرياضة
+    } else if (index == 2) {
+      getSciencesData(); // بعد إصدار الحالة، قم بجلب بيانات العلوم
+    }
+  }
+
   List<dynamic> business= [];
   List<dynamic> sports= [];
   List<dynamic>  sciences= [];
+  List<dynamic>  search= [];
 
-  void getBusinessData(){
+  void getBusinessData() {
     emit(NewsGetBusinessLoadingStates());
-    DioHelper.getData(
-        url: 'v2/top-headlines',
-        query: {
-          'country':'us',
-          'category':'business',
-          'apiKey' : 'd470d1fdeb764cb4b7edb87889753390'
-        }).then((value) {
 
-          business = value?.data['articles'];
-          emit(NewsGetBusinessSuccessStates());
-          print(business[0]['title']);
-      // print(value?.data.toString());
-     // print(value?.data['articles'][0]['title']);
-    },).catchError((erorr){
-      print('Erorr Whene get Data ${erorr.toString()}');
-      emit(NewsGetBusinessErrorStates(erorr.toString()));
+    DioHelper.getData(
+      url: 'v2/top-headlines',
+      query: {
+        'country': 'us',
+        'category': 'business',
+        'apiKey': 'd470d1fdeb764cb4b7edb87889753390'
+      },
+    ).then((value) {
+      business = value?.data['articles'];
+      emit(NewsGetBusinessSuccessStates());
+      print(business[0]['title']);
+    }).catchError((error) {
+      print('Error when getting data: ${error.toString()}');
+      emit(NewsGetBusinessErrorStates(error.toString()));
     });
   }
   void getSportsData(){
@@ -106,7 +120,6 @@ class NewsCubit extends Cubit<NewsStates>{
 
    }
   }
-
   void getSciencesData(){
     emit(NewsGetSciencesLoadingStates());
     if(sciences.length == 0){
@@ -133,4 +146,38 @@ class NewsCubit extends Cubit<NewsStates>{
 
     }
   }
-}
+
+  void getSearchData(String value) {
+    emit(NewsGetSearchLoadingStates());
+
+    // تحقق مما إذا كانت قائمة العلوم فارغة وقم بمعالجة ذلك
+
+      // استدعاء DioHelper للحصول على البيانات من API
+      DioHelper.getData(
+        url: 'v2/everything',
+        query: {
+          'q': value,
+          'apiKey': 'd470d1fdeb764cb4b7edb87889753390',
+        },
+      ).then((value) {
+        // التحقق من وجود البيانات في الاستجابة
+        if (value != null && value.data != null) {
+          search = value.data['articles'];
+
+          if (search.isNotEmpty) {
+            print(search[0]['title']);
+          } else {
+            print('No articles found.');
+          }
+
+          emit(NewsGetSearchSuccessStates());
+          print('Searching here...');
+        } else {
+          emit(NewsGetSearchErrorStates("No data returned"));
+        }
+      }).catchError((error) {
+        print('Error when getting sciences data: ${error.toString()}');
+        emit(NewsGetSearchErrorStates(error.toString()));
+      });
+    }
+  }
