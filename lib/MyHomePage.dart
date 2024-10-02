@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:untitled2/calculateScareen.dart';
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
 
 
   @override
@@ -22,7 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text('BIM Calculator',
+        title: const Text('BIM Calculator',
         style: TextStyle(
           color: Colors.white
         ),
@@ -50,9 +52,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       decoration: BoxDecoration(
 
                         color: isMale ? Colors.amber :  Colors.grey,
-                        borderRadius: BorderRadius.all(Radius.circular(20))
+                        borderRadius: const BorderRadius.all(Radius.circular(20))
                       ),
-                      child: Column(
+                      child: const Column(
                         children: [
                           Icon(Icons.male,
                             size: 150,
@@ -66,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 15,
                 ),
                 Expanded(
@@ -82,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       decoration: BoxDecoration(
                   
                           color: !isMale ? Colors.amber : Colors.grey,
-                          borderRadius: BorderRadius.all(Radius.circular(20))
+                          borderRadius: const BorderRadius.all(Radius.circular(20))
                       ),
                       child: const Column(
                         children: [
@@ -106,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Container(
 
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.grey,
                     borderRadius: BorderRadius.all(Radius.circular(20))
 
@@ -115,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Heigth',
+                    const Text('Heigth',
                     style: TextStyle(
                       fontSize: 40,
                     ),),
@@ -125,11 +127,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('${heigth.round()}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 50,
                             fontWeight: FontWeight.bold
                           ),),
-                        Text('CM',
+                        const Text('CM',
                           style: TextStyle(
                             fontSize: 30,
                           ),),
@@ -158,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Expanded(
                     child: Container(
 
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: Colors.grey,
                           borderRadius: BorderRadius.all(Radius.circular(20))
 
@@ -168,12 +170,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
 
                         children: [
-                           Text('Age',
+                           const Text('Age',
                             style: TextStyle(
                               fontSize: 40,
                             ),),
                            Text('$age',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 50,
                                 fontWeight: FontWeight.bold
                             ),),
@@ -188,18 +190,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                   age++;
                                 });
                               },
-                              child: Icon(CupertinoIcons.plus),
                               heroTag:'age+' ,
+                              child: const Icon(CupertinoIcons.plus),
                               ),
-                              SizedBox(width: 20,),
+                              const SizedBox(width: 20,),
                               FloatingActionButton(onPressed: () {
 
                                 setState(() {
                                   age--;
                                 });
                               },
-                                child: Icon(CupertinoIcons.minus),
-                                  heroTag:'age-'
+                                  heroTag:'age-',
+                                child: const Icon(CupertinoIcons.minus)
                               ),
                             ],
                           ),
@@ -209,11 +211,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 15,),
+                  const SizedBox(width: 15,),
                   Expanded(
                     child: Container(
 
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: Colors.grey,
                           borderRadius: BorderRadius.all(Radius.circular(20))
 
@@ -222,12 +224,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                           Text('whigth',
+                           const Text('whigth',
                             style: TextStyle(
                               fontSize: 40,
                             ),),
                            Text('$whigte',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 50,
                                 fontWeight: FontWeight.bold
                             ),),
@@ -243,8 +245,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                   whigte++;
                                 });
                               },
-                                child: const Icon(CupertinoIcons.plus),
                                 heroTag:'whigte+' ,
+                                child: const Icon(CupertinoIcons.plus),
                               ),
                               const SizedBox(width: 20,),
                                FloatingActionButton(onPressed: () {
@@ -253,8 +255,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                    whigte--;
                                  });
                               },
-                                  child: Icon(CupertinoIcons.minus),
-                                  heroTag:'whigte-'
+                                  heroTag:'whigte-',
+                                  child: const Icon(CupertinoIcons.minus)
                               ),
                             ],
                           ),
@@ -280,7 +282,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.push(context, MaterialPageRoute(builder: (context) => calculateScareen(isMale: isMale, heigth: heigth, bim: bim2.round(),),));
 
             },
-            child: Text('Calculate',
+            child: const Text('Calculate',
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,

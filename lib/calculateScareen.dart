@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class calculateScareen extends StatelessWidget {
@@ -21,7 +20,7 @@ class calculateScareen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('RESALTE'),
+        title: const Text('RESALTE'),
       ),
       body: Center(
 
@@ -31,16 +30,16 @@ class calculateScareen extends StatelessWidget {
           children: [
 
             Text('Gender :${isMale ? 'male':'female' }',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 35,
             ),
             ),
             Text('hitgit :${heigth.round()} ',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 35,
               ),),
-            Text('BIM Calculate : ${bim}',
-              style: TextStyle(
+            Text('BIM Calculate : $bim',
+              style: const TextStyle(
                 fontSize: 35,
               ),),
 

@@ -17,6 +17,8 @@ class HomeLayout extends StatelessWidget {
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
 
+  HomeLayout({super.key});
+
 
 
 
@@ -90,13 +92,13 @@ class HomeLayout extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
-                              padding: EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
                                 controller: titleController,
                                 decoration: const InputDecoration(
                                     prefix: Padding(
                                       padding:
-                                      const EdgeInsets.only(right: 10.0),
+                                      EdgeInsets.only(right: 10.0),
                                       child: Icon(Icons.title),
                                     ),
                                     border: OutlineInputBorder(),
@@ -155,7 +157,7 @@ class HomeLayout extends StatelessWidget {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
                                 readOnly: true,
                                 controller: timeController,
@@ -177,7 +179,7 @@ class HomeLayout extends StatelessWidget {
                                 decoration: const InputDecoration(
                                     prefix: Padding(
                                       padding:
-                                      const EdgeInsets.only(right: 10.0),
+                                      EdgeInsets.only(right: 10.0),
                                       child: Icon(Icons.access_time_outlined),
                                     ),
                                     border: OutlineInputBorder(),

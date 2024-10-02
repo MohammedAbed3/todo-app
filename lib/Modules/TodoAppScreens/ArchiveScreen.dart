@@ -41,7 +41,7 @@ class ArchiveScreen extends StatelessWidget {
                   ),
                 ]),
           ),
-          condition: tasks.length > 0,
+          condition: tasks.isNotEmpty,
         );
       },
       listener: (context, state) {

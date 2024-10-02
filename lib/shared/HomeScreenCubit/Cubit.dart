@@ -19,9 +19,9 @@ class AppCubit extends Cubit<AppStets> {
 
   int bnbSelected = 0;
   List<Widget> screen = [
-    Taskscreen(),
-    DoneScreen(),
-    ArchiveScreen(),
+    const Taskscreen(),
+    const DoneScreen(),
+    const ArchiveScreen(),
   ];
 
   static AppCubit get(context) => BlocProvider.of(context);
@@ -114,7 +114,7 @@ class AppCubit extends Cubit<AppStets> {
 
 
       },
-    );;
+    );
   }
 
   void updateDate({

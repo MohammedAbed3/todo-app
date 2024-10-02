@@ -4,7 +4,7 @@ class Webview extends StatelessWidget {
 
   final String url;
 
-  Webview(this.url);
+  const Webview(this.url, {super.key});
 
   @override
   Widget build(BuildContext context) {

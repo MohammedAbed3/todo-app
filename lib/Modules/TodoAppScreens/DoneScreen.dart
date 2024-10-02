@@ -16,7 +16,7 @@ class DoneScreen extends StatelessWidget {
         var tasks = AppCubit.get(context).doneTasks;
 
         return  ConditionalBuilder(
-          condition: tasks.length > 0,
+          condition: tasks.isNotEmpty,
           fallback:(context) => const Center(
 
             child: Column(

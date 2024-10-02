@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,10 +8,7 @@ import 'package:untitled2/Layout/NewsApp/news_layout.dart';
 import 'package:untitled2/shared/Networks/local/CacheHelper.dart';
 import 'package:untitled2/shared/Networks/remote/dio_helper.dart';
 import 'package:untitled2/shared/bloc_observer.dart';
-import 'package:untitled2/traningBloce.dart';
 
-import 'MyHomePage.dart';
-import 'calculateScareen.dart';
 
 void main()async {
 
@@ -31,7 +27,7 @@ class MyApp extends StatelessWidget {
   final bool isDark;
 
 
-  MyApp(this.isDark);
+  const MyApp(this.isDark, {super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -43,7 +39,7 @@ class MyApp extends StatelessWidget {
             title: 'Flutter Demo',
             theme: ThemeData(
                 scaffoldBackgroundColor: Colors.white,
-                floatingActionButtonTheme: FloatingActionButtonThemeData(
+                floatingActionButtonTheme: const FloatingActionButtonThemeData(
                   backgroundColor: Colors.deepOrange,
                 ),
                 appBarTheme: const AppBarTheme(
@@ -58,7 +54,7 @@ class MyApp extends StatelessWidget {
                     systemOverlayStyle: SystemUiOverlayStyle(
                         statusBarColor: Colors.white,
                         statusBarIconBrightness: Brightness.dark)),
-                bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                bottomNavigationBarTheme: const BottomNavigationBarThemeData(
                   type: BottomNavigationBarType.fixed,
                   selectedItemColor: Colors.deepOrangeAccent,
                   elevation: 20,
@@ -70,8 +66,8 @@ class MyApp extends StatelessWidget {
               appBarTheme: AppBarTheme(
                   backgroundColor: HexColor('333739'),
                   elevation: 0.0,
-                  iconTheme: IconThemeData(color: Colors.white),
-                  titleTextStyle: TextStyle(
+                  iconTheme: const IconThemeData(color: Colors.white),
+                  titleTextStyle: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontSize: 20,
@@ -87,7 +83,7 @@ class MyApp extends StatelessWidget {
                 unselectedItemColor: Colors.grey,
                 backgroundColor: HexColor('333739'),
               ),
-              textTheme: TextTheme(
+              textTheme: const TextTheme(
                 bodyLarge: TextStyle(
                   color: Colors.white,
                   fontSize: 16.0,
@@ -96,7 +92,7 @@ class MyApp extends StatelessWidget {
             ),
             themeMode: NewsCubit.get(context).isDark ? ThemeMode.dark :ThemeMode.light,
             debugShowCheckedModeBanner: false,
-            home: news_layout(),
+            home: const news_layout(),
           );
         },
         listener: (context, state) {},

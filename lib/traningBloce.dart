@@ -15,7 +15,7 @@ class traningBloce extends StatelessWidget {
           return Scaffold(
 
               appBar: AppBar(),
-              body: Container(
+              body: SizedBox(
                 height: double.infinity,
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
@@ -27,21 +27,21 @@ class traningBloce extends StatelessWidget {
 
                           CounterCubit.get(context).counterPlus();
                         },
-                        child: Text('+',
+                        child: const Text('+',
                           style: TextStyle(
                               fontSize: 40
                           ),)
 
                     ),
                     Text('${CounterCubit.get(context).counter}',
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 40
                       ),),
                     TextButton(
                         onPressed: () {
                           CounterCubit.get(context).counterMinus();
                         },
-                        child: Text('-',
+                        child: const Text('-',
                           style: TextStyle(
                               fontSize: 50
                           ),)),

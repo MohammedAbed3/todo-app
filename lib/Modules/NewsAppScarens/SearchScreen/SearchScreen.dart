@@ -19,7 +19,7 @@ class SearchScreen extends StatelessWidget {
           body: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   label: Text('Search'),
                   border: OutlineInputBorder(),
                   prefix: Icon(Icons.search,),
@@ -29,7 +29,7 @@ class SearchScreen extends StatelessWidget {
 
                   cubit.getSearchData(value);
                 },
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.white
                 ),
               ),

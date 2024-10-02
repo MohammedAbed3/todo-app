@@ -6,6 +6,8 @@ import 'package:untitled2/shared/HomeScreenCubit/Cubit.dart';
 import 'package:untitled2/shared/HomeScreenCubit/Stetes.dart';
 
 class Taskscreen extends StatelessWidget {
+  const Taskscreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStets>(
@@ -39,7 +41,7 @@ class Taskscreen extends StatelessWidget {
                   ),
                 ]),
           ),
-          condition: tasks.length > 0,
+          condition: tasks.isNotEmpty,
         );
       },
       listener: (context, state) {},
