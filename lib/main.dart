@@ -5,8 +5,10 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:untitled2/Layout/NewsApp/Cubit/cubit.dart';
 import 'package:untitled2/Layout/NewsApp/Cubit/states.dart';
 import 'package:untitled2/Layout/NewsApp/news_layout.dart';
+import 'package:untitled2/Modules/ShopApp/OnBoarding/OnBoardingScreen.dart';
 import 'package:untitled2/shared/Networks/local/CacheHelper.dart';
 import 'package:untitled2/shared/Networks/remote/dio_helper.dart';
+import 'package:untitled2/shared/Styles/colors.dart';
 import 'package:untitled2/shared/bloc_observer.dart';
 
 
@@ -37,10 +39,14 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
             title: 'Flutter Demo',
+
             theme: ThemeData(
+              fontFamily: 'Roboto',
+
+              primarySwatch: primaryColor,
                 scaffoldBackgroundColor: Colors.white,
                 floatingActionButtonTheme: const FloatingActionButtonThemeData(
-                  backgroundColor: Colors.deepOrange,
+                  backgroundColor: primaryColor,
                 ),
                 appBarTheme: const AppBarTheme(
                     backgroundColor: Colors.white,
@@ -60,9 +66,13 @@ class MyApp extends StatelessWidget {
                   elevation: 20,
                   unselectedItemColor: Colors.grey,
                   backgroundColor: Colors.white,
-                )),
+
+                ),
+            ),
             darkTheme: ThemeData(
-              primarySwatch: Colors.deepOrange,
+              fontFamily: 'Roboto',
+
+              primarySwatch: primaryColor,
               appBarTheme: AppBarTheme(
                   backgroundColor: HexColor('333739'),
                   elevation: 0.0,
@@ -89,10 +99,13 @@ class MyApp extends StatelessWidget {
                   fontSize: 16.0,
                 ),
               ),
+              floatingActionButtonTheme: FloatingActionButtonThemeData(
+                backgroundColor: primaryColor
+              )
             ),
             themeMode: NewsCubit.get(context).isDark ? ThemeMode.dark :ThemeMode.light,
             debugShowCheckedModeBanner: false,
-            home: const news_layout(),
+            home:  OnBoardingScreen(),
           );
         },
         listener: (context, state) {},

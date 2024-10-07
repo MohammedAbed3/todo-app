@@ -125,8 +125,7 @@ Widget defaultButton({
   double radius = 3.0,
   required VoidCallback? function ,
   required String text,
-}) =>
-    Container(
+}) => Container(
       width: width,
       height: 50.0,
       decoration: BoxDecoration(
@@ -158,9 +157,9 @@ Widget defaultFormField({
   required IconData prefix,
   IconData? suffix,
   VoidCallback? suffixPressed,
+  TextInputAction? textAction,
   bool isClickable = true,
-}) =>
-    TextFormField(
+}) => TextFormField(
       controller: controller,
       keyboardType: type,
       obscureText: isPassword,
@@ -169,6 +168,7 @@ Widget defaultFormField({
       onChanged: onChange,
       onTap: onTap,
       validator: validate,
+      textInputAction: textAction,
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: Icon(
@@ -185,6 +185,15 @@ Widget defaultFormField({
         border: const OutlineInputBorder(),
       ),
     );
+
+Widget defaultTextButton({
+    required VoidCallback? function ,
+  required String text,
+
+}
+    )=>TextButton(
+    onPressed: function,
+    child: Text('$text'));
 
 
 
@@ -217,3 +226,8 @@ Widget myDivider() => Padding(
   ),
 );
 
+Future navgetTo (context,widget)=> Navigator.push(context, MaterialPageRoute(builder: (context) =>widget ,));
+Future navgetToKill (context,widget)=>Navigator.pushAndRemoveUntil(context,
+    MaterialPageRoute(builder: (context) => widget,),
+    (Route<dynamic> route) => false
+);

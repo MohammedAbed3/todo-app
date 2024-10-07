@@ -44,6 +44,9 @@ dependencies:
   hexcolor: ^3.0.1
   shared_preferences: ^2.3.2
   webview_flutter: ^4.9.0
+  smooth_page_indicator: ^1.2.0+3
+  fluttertoast: ^8.2.8
+
 
 
 
@@ -77,6 +80,10 @@ flutter:
   assets:
     - assets/images/
 
+  fonts:
+     - family: Roboto
+       fonts:
+         - asset: assets/fonts/Roboto.ttf
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

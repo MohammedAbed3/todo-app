@@ -1,0 +1,170 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:untitled2/Modules/ShopApp/Login/cubit/cubit.dart';
+import 'package:untitled2/Modules/ShopApp/Login/cubit/state.dart';
+import 'package:untitled2/Modules/ShopApp/Register/ShopRegisterScreen.dart';
+import 'package:untitled2/shared/Components/components.dart';
+
+class ShopLoginScreen extends StatelessWidget {
+
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+  var formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ShopLoginCubit(),
+      child: BlocConsumer<ShopLoginCubit,ShopLoginStates>(
+        listener: (context, state) {
+          if(state is ShopLoginSuccessState){
+            if(state.model.status!){
+              print(state.model.status);
+              print(state.model.message);
+              print(state.model.data?.token);
+              Fluttertoast.showToast(
+                  msg: state.model.message.toString(),
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 5,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+            }else{
+              print(state.model.message);
+              Fluttertoast.showToast(
+                  msg: state.model.message.toString(),
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 5,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+            }
+
+          }
+        },
+
+          builder: (context, state) {
+
+          ShopLoginCubit cubit = ShopLoginCubit.get(context);
+            return Scaffold(
+              appBar: AppBar(),
+              body:  Center(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('LOGIN',
+                              style: Theme.of(context).textTheme.displayMedium ,),
+                            Text('login now to browse our hot offers'
+                              ,
+                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  color: Colors.grey
+                              ) ,),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            defaultFormField(
+                                controller: emailController,
+                                type: TextInputType.emailAddress,
+                                validate: ( value) {
+                                  if(value!.isEmpty){
+                                    return 'please enter your email';
+                                  }
+                                },
+                                label: 'Email Address',
+                                prefix: Icons.email_outlined,
+                              textAction: TextInputAction.next
+
+                            ),
+
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            defaultFormField(
+                                controller: passwordController,
+                                type: TextInputType.visiblePassword,
+                                validate: ( value) {
+                                  if(value!.isEmpty){
+                                    return 'password too short';
+                                  }
+                                },
+                                label: 'Password Address',
+                                prefix: Icons.lock_clock_outlined,
+                                suffix: cubit.suffix,
+                              suffixPressed: () {
+                                cubit.changePasswordSate();
+
+                              },
+
+
+                                textAction: TextInputAction.done,
+                                isPassword: cubit.isPassword,
+
+                                onSubmit: (value) {
+                                if(formKey.currentState!.validate()){
+                                  cubit.userLogin(
+                                      email: emailController.text,
+                                      password: passwordController.text);
+                                }
+
+                              },
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            ConditionalBuilder(
+                              condition: state is! ShopLoginLoadingState,
+                              builder: (context) => defaultButton(
+                                  function: () {
+                                    if(formKey.currentState!.validate()){
+                                      cubit.userLogin(
+                                          email: emailController.text,
+                                          password: passwordController.text);
+                                    }
+
+
+
+                                  },
+                                  text: 'login',
+                                  isUpperCase: true
+                              ),
+                              fallback: (context) => Center(child: CircularProgressIndicator()),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('Dont hava an account',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                defaultTextButton(
+                                    function: () {
+                                      navgetTo(context, ShopRegisterScreen());
+                                    },
+                                    text: 'Register Now')
+                              ],
+                            )
+
+
+                          ]
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+         ),
+    );
+  }
+}
