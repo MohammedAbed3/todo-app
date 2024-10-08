@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:untitled2/Modules/ShopApp/Login/ShopLoginScreen.dart';
 import 'package:untitled2/shared/Components/components.dart';
+import 'package:untitled2/shared/Networks/local/CacheHelper.dart';
 
 import '../../../shared/Styles/colors.dart';
 
 class OnBoardingScreen extends StatefulWidget {
+  const OnBoardingScreen({super.key});
+
 
 
   @override
@@ -38,7 +41,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       appBar: AppBar(
         actions: [
           TextButton(onPressed: () {
-            navgetToKill(context,  ShopLoginScreen());
+            submit();
           }, child: const Text('SKIP',
             style: TextStyle(
               color: primaryColor
@@ -68,7 +71,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     });
                   }
                 },
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 controller: pageViewController,
                   itemBuilder: (context, index) => PageViewItem(modelList[index]),
                   itemCount: modelList.length,
@@ -90,7 +93,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 FloatingActionButton(onPressed: () {
 
                   if(isLast){
-                    navgetToKill(context, ShopLoginScreen());
+                    submit();
                   }else{
                     pageViewController.nextPage(
                         duration: const Duration(
@@ -113,7 +116,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
     );
   }
+  void submit(){
+    CacheHelper.savaDate(key: 'onBoarding', value: true).then((value) {
+      if(value!){
+        navgetToKill(context, ShopLoginScreen());
+
+      }
+
+    },);
+  }
 }
+
 
 class PageViewModel{
 
@@ -131,13 +144,13 @@ Widget PageViewItem (PageViewModel model)=>Column(
 
     Image.asset(model.image),
     const SizedBox(height: 40,),
-    Text('${model.titel}',
+    Text(model.titel,
     style:const TextStyle(
       fontSize: 35,
 
 
     ),),
-    Text('${model.description}',
+    Text(model.description,
       style:const TextStyle(
         fontSize: 20,
 

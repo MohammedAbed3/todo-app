@@ -1,51 +1,47 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:untitled2/Layout/shopApp/ShopLayout.dart';
 import 'package:untitled2/Modules/ShopApp/Login/cubit/cubit.dart';
 import 'package:untitled2/Modules/ShopApp/Login/cubit/state.dart';
 import 'package:untitled2/Modules/ShopApp/Register/ShopRegisterScreen.dart';
 import 'package:untitled2/shared/Components/components.dart';
+import 'package:untitled2/shared/Networks/local/CacheHelper.dart';
 
 class ShopLoginScreen extends StatelessWidget {
 
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
+
+  ShopLoginScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ShopLoginCubit(),
       child: BlocConsumer<ShopLoginCubit,ShopLoginStates>(
         listener: (context, state) {
-          if(state is ShopLoginSuccessState){
-            if(state.model.status!){
+          if (state is ShopLoginSuccessState) {
+            if (state.model.status!) {
               print(state.model.status);
               print(state.model.message);
               print(state.model.data?.token);
-              Fluttertoast.showToast(
-                  msg: state.model.message.toString(),
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 5,
-                  backgroundColor: Colors.red,
-                  textColor: Colors.white,
-                  fontSize: 16.0
-              );
-            }else{
+              CacheHelper.savaDate(key: 'token', value: state.model.data?.token).then((value) {
+                navgetToKill(context, ShopLayout());
+              },);
+              ShowSnakBar(context: context, text: '${state.model.message}');
+            } else {
               print(state.model.message);
-              Fluttertoast.showToast(
-                  msg: state.model.message.toString(),
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 5,
-                  backgroundColor: Colors.red,
-                  textColor: Colors.white,
-                  fontSize: 16.0
-              );
-            }
 
+              ShowSnakBar(context: context, text: 'حدث خطا${state.model.message}');
+            }
           }
+          if (state is ShopLoginErrorState) {
+            // قم بتعيين المتغير هنا إلى الحالة
+            ShopLoginErrorState errorState = state;
+          ShowSnakBar(context: context, text: "حدث خطا");
+          }
+
         },
 
           builder: (context, state) {
@@ -79,6 +75,7 @@ class ShopLoginScreen extends StatelessWidget {
                                   if(value!.isEmpty){
                                     return 'please enter your email';
                                   }
+                                  return null;
                                 },
                                 label: 'Email Address',
                                 prefix: Icons.email_outlined,
@@ -96,6 +93,7 @@ class ShopLoginScreen extends StatelessWidget {
                                   if(value!.isEmpty){
                                     return 'password too short';
                                   }
+                                  return null;
                                 },
                                 label: 'Password Address',
                                 prefix: Icons.lock_clock_outlined,
@@ -137,7 +135,7 @@ class ShopLoginScreen extends StatelessWidget {
                                   text: 'login',
                                   isUpperCase: true
                               ),
-                              fallback: (context) => Center(child: CircularProgressIndicator()),
+                              fallback: (context) => const Center(child: CircularProgressIndicator()),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -149,7 +147,7 @@ class ShopLoginScreen extends StatelessWidget {
                                 ),
                                 defaultTextButton(
                                     function: () {
-                                      navgetTo(context, ShopRegisterScreen());
+                                      navgetTo(context, const ShopRegisterScreen());
                                     },
                                     text: 'Register Now')
                               ],

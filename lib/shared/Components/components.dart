@@ -193,7 +193,7 @@ Widget defaultTextButton({
 }
     )=>TextButton(
     onPressed: function,
-    child: Text('$text'));
+    child: Text(text));
 
 
 
@@ -231,3 +231,12 @@ Future navgetToKill (context,widget)=>Navigator.pushAndRemoveUntil(context,
     MaterialPageRoute(builder: (context) => widget,),
     (Route<dynamic> route) => false
 );
+
+void ShowSnakBar({required BuildContext context, required String text,Color? color}){
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(text),
+      backgroundColor:color ,
+    ),
+  );
+}
