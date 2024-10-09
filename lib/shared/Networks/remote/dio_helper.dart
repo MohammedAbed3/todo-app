@@ -9,22 +9,21 @@ class DioHelper {
     dio = Dio(BaseOptions(
         baseUrl: 'https://student.valuxapps.com/api/',
         receiveDataWhenStatusError: true,
-        headers: {
-          'Content-Type':'application/json',
 
-        }
+
     )
     );
   }
 
   static Future<Response?> getData(
-      {required String url, required Map<String, dynamic> query,
-        String lang = 'ar',
+      {required String url,  Map<String, dynamic>? query,
+        String lang = 'en',
         String? token,}) async {
     dio?.options.headers =
     {
       'lang':lang,
       'Authorization':token,
+      'Content-Type':'application/json',
     };
 
 
@@ -38,19 +37,20 @@ class DioHelper {
   static Future<Response>? postData({
     required String url,
      Map<String, dynamic>? query,
-    required Map<String, dynamic> date,
-    String lang = 'ar',
+    required Map<String, dynamic> data,
+    String lang = 'en',
     String? token,
 }){
     dio?.options.headers =
        {
         'lang':lang,
         'Authorization':token,
+         'Content-Type':'application/json',
       };
 
     return dio?.post(url,
     queryParameters: query,
-      data: date
+      data: data
     );
   }
 }

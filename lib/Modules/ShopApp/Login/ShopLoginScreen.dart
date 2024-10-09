@@ -38,7 +38,7 @@ class ShopLoginScreen extends StatelessWidget {
           }
           if (state is ShopLoginErrorState) {
             // قم بتعيين المتغير هنا إلى الحالة
-            ShopLoginErrorState errorState = state;
+
           ShowSnakBar(context: context, text: "حدث خطا");
           }
 

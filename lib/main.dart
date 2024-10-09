@@ -5,8 +5,10 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:untitled2/Layout/NewsApp/Cubit/cubit.dart';
 import 'package:untitled2/Layout/NewsApp/Cubit/states.dart';
 import 'package:untitled2/Layout/shopApp/ShopLayout.dart';
+import 'package:untitled2/Layout/shopApp/shopCubit/cubit.dart';
 import 'package:untitled2/Modules/ShopApp/Login/ShopLoginScreen.dart';
 import 'package:untitled2/Modules/ShopApp/OnBoarding/OnBoardingScreen.dart';
+import 'package:untitled2/shared/Constains/constains.dart';
 import 'package:untitled2/shared/Networks/local/CacheHelper.dart';
 import 'package:untitled2/shared/Networks/remote/dio_helper.dart';
 import 'package:untitled2/shared/Styles/colors.dart';
@@ -23,7 +25,7 @@ void main()async {
 
   bool newMode = CacheHelper.getData(key: 'isDark') ?? false;
   bool onBoarding = CacheHelper.getData(key: 'onBoarding');
-  String? token = CacheHelper.getData(key: 'token');
+  token= CacheHelper.getData(key: 'token');
   print(onBoarding);
 
   Widget widget;
@@ -47,22 +49,32 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => NewsCubit()..getBusinessData()..changeMode(fromShared: isDark),
-      child: BlocConsumer<NewsCubit, NewsStates>(
-        builder: (context, state) {
-          return MaterialApp(
-            title: 'Flutter Demo',
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+        create: (context) => NewsCubit()..getBusinessData()..changeMode(fromShared: isDark),
+        ),
+        BlocProvider(
+        create: (context) => ShopCubit()..getHomeData()..getCategoriesData(),
+        ),
 
-            theme: ligthThame ,
-            darkTheme: darkThame,
-            themeMode: NewsCubit.get(context).isDark ? ThemeMode.dark :ThemeMode.light,
-            debugShowCheckedModeBanner: false,
-            home:  startWidget,
-          );
-        },
-        listener: (context, state) {},
-      ),
+    ],
+      child: BlocConsumer<NewsCubit, NewsStates>(
+          builder: (context, state) {
+            return MaterialApp(
+              title: 'Flutter Demo',
+
+              theme: ligthThame ,
+              
+              darkTheme: darkThame,
+              themeMode: NewsCubit.get(context).isDark ? ThemeMode.dark :ThemeMode.light,
+              debugShowCheckedModeBanner: false,
+              home:  startWidget,
+            );
+          },
+          listener: (context, state) {},
+        ),
+
     );
   }
 }
