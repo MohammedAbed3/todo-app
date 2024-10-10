@@ -9,4 +9,4 @@ void signOutShopApp(context){
   },);
 }
 
-String token = '';
+String? token = '';

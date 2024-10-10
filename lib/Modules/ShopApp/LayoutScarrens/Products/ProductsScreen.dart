@@ -9,6 +9,8 @@ import 'package:untitled2/Model/shop_app/categories_model.dart';
 import 'package:untitled2/Model/shop_app/home_model.dart';
 import 'package:untitled2/shared/Styles/colors.dart';
 
+import '../../../../shared/Components/components.dart';
+
 class ProductsScreen extends StatelessWidget {
 
   var ShopHomeController = PageController();
@@ -17,6 +19,16 @@ class ProductsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return  BlocConsumer<ShopCubit,ShopStates>(
       listener: (context, state) {
+        if(state is ShopSuccessChangeFavoriteState){
+        if( !state.model.status!){
+          ShowSnakBar(context: context, text: '${state.model.message}');
+
+        }else{
+          ShowSnakBar(context: context, text: '${state.model.message}');
+
+        }
+
+        }
 
       },
       builder: (context, state) {
@@ -24,13 +36,13 @@ class ProductsScreen extends StatelessWidget {
         ShopCubit cubit = ShopCubit.get(context);
         return ConditionalBuilder(
             condition: cubit.model != null && cubit.categoriesModel != null,
-            builder: (context) =>productsBuilder(cubit.model,cubit.categoriesModel) ,
+            builder: (context) =>productsBuilder(cubit.model,cubit.categoriesModel,context) ,
             fallback:(context) =>  Center(child: CircularProgressIndicator()));
       },
     );
   }
 
-  Widget productsBuilder(HomeModel? model,CategoriesModel? catModel){
+  Widget productsBuilder(HomeModel? model,CategoriesModel? catModel , context){
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Column(
@@ -101,7 +113,7 @@ class ProductsScreen extends StatelessWidget {
               childAspectRatio: 1/1.58,
 
               physics: NeverScrollableScrollPhysics(),
-              children: List.generate(model!.data!.products.length, (index) =>buildGridProduct(model.data!.products[index]) ),
+              children: List.generate(model!.data!.products.length, (index) =>buildGridProduct(model.data!.products[index],context) ),
             ),
           )
         ],
@@ -109,7 +121,7 @@ class ProductsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildGridProduct(ProductsModel model){
+  Widget buildGridProduct(ProductsModel model ,BuildContext context){
     return Container(
       color: Colors.white,
       child: Column(
@@ -154,6 +166,7 @@ class ProductsScreen extends StatelessWidget {
                 ),
                 ),
                 Row(
+
                   children: [
                     Text('${model.price.round()}',
 
@@ -179,13 +192,25 @@ class ProductsScreen extends StatelessWidget {
                     ),
                     ),
                     Spacer(),
-                    IconButton(onPressed: () {
-                      
-                    },
-                        padding: EdgeInsets.zero,
-                        icon: Icon(Icons.favorite_border,
-                    size: 20,
-                    ))
+                    CircleAvatar(
+                      radius: 15,
+                      backgroundColor: ShopCubit.get(context).favorites?[model.id] == true
+                          ? primaryColor
+                          : Colors.grey,
+                      child: IconButton(onPressed: () {
+
+                        print(model.id);
+
+                        ShopCubit.get(context).changeFavorite(model.id);
+
+
+                      },
+                          padding: EdgeInsets.zero,
+                          icon: Icon(Icons.favorite_border,
+                      color: Colors.white,
+                      size: 20,
+                      )),
+                    )
                   ],
                 ),
               ],

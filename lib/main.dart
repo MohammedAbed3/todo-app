@@ -23,8 +23,8 @@ void main()async {
   await CacheHelper.init();
   Bloc.observer = MyBlocObserver();
 
-  bool newMode = CacheHelper.getData(key: 'isDark') ?? false;
-  bool onBoarding = CacheHelper.getData(key: 'onBoarding');
+  bool? newMode = CacheHelper.getData(key: 'isDark') ;
+  bool? onBoarding = CacheHelper.getData(key: 'onBoarding') ;
   token= CacheHelper.getData(key: 'token');
   print(onBoarding);
 
@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
               theme: ligthThame ,
               
               darkTheme: darkThame,
-              themeMode: NewsCubit.get(context).isDark ? ThemeMode.dark :ThemeMode.light,
+              themeMode: NewsCubit.get(context).isDark ? ThemeMode.light :ThemeMode.light,
               debugShowCheckedModeBanner: false,
               home:  startWidget,
             );

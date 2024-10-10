@@ -13,6 +13,8 @@ import 'package:untitled2/shared/Constains/constains.dart';
 import 'package:untitled2/shared/Networks/end_points.dart';
 import 'package:untitled2/shared/Networks/remote/dio_helper.dart';
 
+import '../../../Model/shop_app/change_favorites_model.dart';
+
 class ShopCubit extends Cubit<ShopStates>{
 
   ShopCubit():super(ShopInitialState());
@@ -33,6 +35,7 @@ class ShopCubit extends Cubit<ShopStates>{
   }
 
    HomeModel? model;
+  Map<int?,bool?>? favorites = {};
   void getHomeData(){
     emit(ShopLayoutLoadingState());
     DioHelper.getData(
@@ -40,6 +43,17 @@ class ShopCubit extends Cubit<ShopStates>{
         token: token).then((value) {
 
       model = HomeModel.fromJson(value?.data);
+      print('token here ${token.toString()}');
+
+      model?.data?.products.forEach((e){
+        favorites?.addAll({
+         e.id : e.inFavorites,
+
+        });
+
+      });
+
+      print('Favorites hereee ${favorites.toString()}');
 
       if (model?.data?.banners != null && model!.data!.banners!.isNotEmpty) {
         print(model?.data?.banners[0].image); // الوصول للصورة الأولى من البنرات
@@ -74,6 +88,33 @@ class ShopCubit extends Cubit<ShopStates>{
 
     });
 
+
+  }
+
+
+  ChangeFavoritesModel? changeFavoritesModel;
+  void changeFavorite(int? productId){
+    favorites?[productId] = !favorites![productId]!;
+    emit(ShopChangeFavoriteState());
+    DioHelper.postData(url: FAVORITES, data: {
+      'product_id':productId
+    },token: token)?.then((value) {
+      emit(ShopSuccessChangeFavoriteState(value.data));
+
+
+
+      changeFavoritesModel = ChangeFavoritesModel.fromJson(value.data);
+      if(!changeFavoritesModel!.status!){
+        favorites?[productId] = !favorites![productId]!;
+
+      }
+
+
+      print(value.data);
+    },).catchError((error){
+      favorites?[productId] = !favorites![productId]!;
+
+      emit(ShopErrorChangeFavoriteState(error.toString()));});
 
   }
 }
