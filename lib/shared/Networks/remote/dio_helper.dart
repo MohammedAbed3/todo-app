@@ -36,21 +36,34 @@ class DioHelper {
 
   static Future<Response>? postData({
     required String url,
-     Map<String, dynamic>? query,
+    Map<String, dynamic>? query,
     required Map<String, dynamic> data,
     String lang = 'en',
     String? token,
-}){
-    dio?.options.headers =
-       {
-        'lang':lang,
-        'Authorization':token,
-         'Content-Type':'application/json',
-      };
+  }) async {
+    if (dio == null) {
+      throw Exception('Dio is not initialized');
+    }
 
-    return dio?.post(url,
-    queryParameters: query,
-      data: data
-    );
+    dio?.options.headers = {
+      'lang': lang,
+      'Authorization': token,
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final response = await dio!.post(
+        url,
+        queryParameters: query,
+        data: data,
+      );
+
+      print('Response data: ${response.data}');  // طباعة البيانات المستلمة للتحقق من صحتها
+      return response;
+    } catch (error) {
+      print('Error during post request: $error');
+      throw error;
+    }
   }
+
 }

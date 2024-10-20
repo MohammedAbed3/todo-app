@@ -36,3 +36,11 @@ class ShopErrorChangeFavoriteState extends ShopStates{
   ShopErrorChangeFavoriteState(this.error);
 }
 class ShopChangeFavoriteState extends ShopStates{}
+
+class ShopSuccessGetFavState extends ShopStates{}
+class ShopLoadingGetFavState extends ShopStates{}
+class ShopErrorGetFavState extends ShopStates{
+  final String error;
+
+  ShopErrorGetFavState(this.error);
+}

@@ -12,108 +12,103 @@ import 'package:untitled2/shared/Styles/colors.dart';
 import '../../../../shared/Components/components.dart';
 
 class ProductsScreen extends StatelessWidget {
-
   var ShopHomeController = PageController();
 
   @override
   Widget build(BuildContext context) {
-    return  BlocConsumer<ShopCubit,ShopStates>(
+    return BlocConsumer<ShopCubit, ShopStates>(
       listener: (context, state) {
-        if(state is ShopSuccessChangeFavoriteState){
-        if( !state.model.status!){
-          ShowSnakBar(context: context, text: '${state.model.message}');
-
-        }else{
-          ShowSnakBar(context: context, text: '${state.model.message}');
-
+        if (state is ShopSuccessChangeFavoriteState) {
+          if (!state.model.status!) {
+            ShowSnakBar(context: context, text: '${state.model.message}');
+          }
         }
-
-        }
-
       },
       builder: (context, state) {
-
         ShopCubit cubit = ShopCubit.get(context);
         return ConditionalBuilder(
             condition: cubit.model != null && cubit.categoriesModel != null,
-            builder: (context) =>productsBuilder(cubit.model,cubit.categoriesModel,context) ,
-            fallback:(context) =>  Center(child: CircularProgressIndicator()));
+            builder: (context) =>
+                productsBuilder(cubit.model, cubit.categoriesModel, context),
+            fallback: (context) => Center(child: CircularProgressIndicator()));
       },
     );
   }
 
-  Widget productsBuilder(HomeModel? model,CategoriesModel? catModel , context){
+  Widget productsBuilder(HomeModel? model, CategoriesModel? catModel, context) {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Column(
-
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CarouselSlider(
-              items: model?.data?.banners.map((e) => Image(
-                image: NetworkImage('${e.image}'),
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),).toList(),
+              items: model?.data?.banners
+                  .map(
+                    (e) => Image(
+                      image: NetworkImage('${e.image}'),
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                  .toList(),
               options: CarouselOptions(
-                height: 250,
-                initialPage: 0,
-                enableInfiniteScroll: true,
-                reverse: false,
-                viewportFraction: 1,
-                autoPlay: true,
-                autoPlayInterval: Duration(seconds: 3),
-                autoPlayAnimationDuration: Duration(seconds: 1),
-                autoPlayCurve: Curves.fastOutSlowIn,
-                scrollDirection: Axis.horizontal
-
-
-              )
+                  height: 250,
+                  initialPage: 0,
+                  enableInfiniteScroll: true,
+                  reverse: false,
+                  viewportFraction: 1,
+                  autoPlay: true,
+                  autoPlayInterval: Duration(seconds: 3),
+                  autoPlayAnimationDuration: Duration(seconds: 1),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  scrollDirection: Axis.horizontal)),
+          SizedBox(
+            height: 20,
           ),
-          SizedBox(height: 20,),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Categories',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold
-                ),
+                Text(
+                  'Categories',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
                 Container(
                   height: 100,
                   child: ListView.separated(
-                    physics: BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => buildCategoriesItem(catModel.data!.data[index]),
-                      separatorBuilder: (context, index) =>  SizedBox(width: 10,),
+                      physics: BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) =>
+                          buildCategoriesItem(catModel.data!.data[index]),
+                      separatorBuilder: (context, index) => SizedBox(
+                            width: 10,
+                          ),
                       itemCount: catModel!.data!.data.length),
                 ),
-
-
-                Text('New Procuct',
-                  style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold
-                  ),
+                Text(
+                  'New Procuct',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 20,),
-
+          SizedBox(
+            height: 20,
+          ),
           Container(
             color: Colors.grey[300],
-            child: GridView.count(crossAxisCount: 2,
+            child: GridView.count(
+              crossAxisCount: 2,
               shrinkWrap: true,
               mainAxisSpacing: 1,
               crossAxisSpacing: 1,
-              childAspectRatio: 1/1.58,
-
+              childAspectRatio: 1 / 1.58,
               physics: NeverScrollableScrollPhysics(),
-              children: List.generate(model!.data!.products.length, (index) =>buildGridProduct(model.data!.products[index],context) ),
+              children: List.generate(
+                  model!.data!.products.length,
+                  (index) =>
+                      buildGridProduct(model.data!.products[index], context)),
             ),
           )
         ],
@@ -121,129 +116,171 @@ class ProductsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildGridProduct(ProductsModel model ,BuildContext context){
-    return Container(
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            alignment: AlignmentDirectional.bottomStart,
-            children: [
-              Image(image: NetworkImage('${model.image}'),
-                width: double.infinity,
-
-                height: 200,
-              ),
-              if(model.discount != 0)
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                color: Colors.red,
-                child: Text('Discount',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15
-                ),
-                ),
-              )
-
-            ],
-
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-
+  Widget buildGridProduct(ProductsModel model, BuildContext context) {
+    return Card(
+      elevation: 4, // إضافة ظل خفيف لتمييز الكارد
+      margin: const EdgeInsets.all(8), // مسافة بين العناصر
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15), // حواف دائرية للكارد
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // الصورة مع الخصم
+            Stack(
+              alignment: AlignmentDirectional.bottomStart,
               children: [
-                Text('${model.name}',
-                maxLines: 2,
-                  style: TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  fontSize: 16,
-                    height: 1.3
-
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12), // حواف دائرية للصورة
+                  child: Image.network(
+                    '${model.image}',
+                    width: double.infinity,
+                    height: 150,
+                    fit: BoxFit.cover,
+                  ),
                 ),
+                if (model.discount != 0)
+                  Positioned(
+                    left: 0,
+                    bottom: 0,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.8),
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Discount',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 8), // مسافة بين الصورة والمحتوى
+            // النصوص والمعلومات
+            Text(
+              '${model.name}',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                height: 1.4,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Text(
+                  '${model.price.round()} \$',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                Row(
-
-                  children: [
-                    Text('${model.price.round()}',
-
-                      style: TextStyle(
-                      overflow: TextOverflow.ellipsis,
+                const SizedBox(width: 10),
+                if (model.discount != 0)
+                  Text(
+                    '${model.oldPrice.round()} \$',
+                    style: const TextStyle(
                       fontSize: 12,
-                        height: 1.3,
-                        color: primaryColor
-
+                      color: Colors.grey,
+                      decoration: TextDecoration.lineThrough,
                     ),
-                    ),
-                    SizedBox(width: 10,),
-                    if(model.discount !=0)
-                    Text('${model.oldPrice.round()}',
-
-                      style: TextStyle(
-                      overflow: TextOverflow.ellipsis,
-                      fontSize: 12,
-                        height: 1.3,
-                        color: Colors.grey,
-                        decoration: TextDecoration.lineThrough
-
-                    ),
-                    ),
-                    Spacer(),
-                    CircleAvatar(
-                      radius: 15,
-                      backgroundColor: ShopCubit.get(context).favorites?[model.id] == true
-                          ? primaryColor
+                  ),
+                const Spacer(),
+                // زر المفضلة
+                CircleAvatar(
+                  radius: 18,
+                  backgroundColor:
+                      ShopCubit.get(context).favorites?[model.id] == true
+                          ? Colors.red
                           : Colors.grey,
-                      child: IconButton(onPressed: () {
-
-                        print(model.id);
-
-                        ShopCubit.get(context).changeFavorite(model.id);
-
-
-                      },
-                          padding: EdgeInsets.zero,
-                          icon: Icon(Icons.favorite_border,
+                  child: IconButton(
+                    onPressed: () {
+                      print(model.id);
+                      ShopCubit.get(context).changeFavorite(model.id);
+                    },
+                    padding: EdgeInsets.zero,
+                    icon: const Icon(
+                      Icons.favorite,
                       color: Colors.white,
                       size: 20,
-                      )),
-                    )
-                  ],
+                    ),
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget buildCategoriesItem(CategoriesData model){
-    return           Stack(
-      alignment: AlignmentDirectional.bottomCenter,
-      children:
-      [
-        Image(image: NetworkImage('${model.image}'),
-          width: 100,
-          height: 100,
-          fit: BoxFit.cover,
-        ),
-        Container(
-            width: 100,
-            color: Colors.black.withOpacity(0.8),
-            child: Text('${model.name}',
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  color: Colors.white
+  Widget buildCategoriesItem(CategoriesData model) {
+    return Card(
+      elevation: 4, // ظل خفيف
+      margin: const EdgeInsets.all(8), // مسافات بين العناصر
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12), // حواف دائرية
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12), // حواف دائرية للصورة
+        child: Stack(
+          alignment: AlignmentDirectional.bottomCenter,
+          children: [
+            // استخدام AspectRatio لجعل الصورة متناسبة دائمًا
+            AspectRatio(
+              aspectRatio: 1, // نسبة العرض إلى الارتفاع 1:1
+              child: Image.network(
+                '${model.image}',
+                fit: BoxFit.cover, // ملء الصورة مع الحفاظ على التناسب
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.error, color: Colors.red); // عرض أيقونة عند فشل تحميل الصورة
+                },
               ),
-            ))
-      ],
-    );
+            ),
+            // النص مع خلفية شفافة
+            Container(
+              width: 100,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [primaryColor,
+                      Colors.transparent
+                    ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
 
+
+                )
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Text(
+                '${model.name}',
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

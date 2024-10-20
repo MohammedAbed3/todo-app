@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled2/Layout/shopApp/shopCubit/states.dart';
 import 'package:untitled2/Model/shop_app/categories_model.dart';
+import 'package:untitled2/Model/shop_app/get_favorites_model.dart';
 import 'package:untitled2/Model/shop_app/home_model.dart';
 import 'package:untitled2/Modules/ShopApp/LayoutScarrens/Categories/CategoriesScrren.dart';
 import 'package:untitled2/Modules/ShopApp/LayoutScarrens/Favorites/FavoritesScreen.dart';
@@ -96,25 +97,53 @@ class ShopCubit extends Cubit<ShopStates>{
   void changeFavorite(int? productId){
     favorites?[productId] = !favorites![productId]!;
     emit(ShopChangeFavoriteState());
-    DioHelper.postData(url: FAVORITES, data: {
-      'product_id':productId
-    },token: token)?.then((value) {
-      emit(ShopSuccessChangeFavoriteState(value.data));
+    DioHelper.postData(
+      url: FAVORITES,
+      data: {'product_id': productId},
+      token: token,
+    )?.then((value) {
+      print('Response data: ${value.data}');  // تحقق من البيانات
 
+      // تحقق من حالة الاستجابة
+      if (value.data['status'] == true) {
+        changeFavoritesModel = ChangeFavoritesModel.fromJson(value.data);
+        emit(ShopSuccessChangeFavoriteState(changeFavoritesModel!));
+      getFavorite();
 
-
-      changeFavoritesModel = ChangeFavoritesModel.fromJson(value.data);
-      if(!changeFavoritesModel!.status!){
-        favorites?[productId] = !favorites![productId]!;
-
+      } else {
+        emit(ShopErrorChangeFavoriteState(value.data['message']));
       }
-
-
-      print(value.data);
-    },).catchError((error){
+    }).catchError((error) {
       favorites?[productId] = !favorites![productId]!;
 
-      emit(ShopErrorChangeFavoriteState(error.toString()));});
+      print('Error occurred: $error');
+      emit(ShopErrorChangeFavoriteState(error.toString()));
+    });
 
   }
+
+  FavoritesModel? favModel;
+
+  void getFavorite() {
+emit(ShopLoadingGetFavState());
+    DioHelper.getData(
+      url: FAVORITES,
+      token: token,
+    ).then((value) {
+      print('Response Data: ${value?.data}'); // تحقق من البيانات المستلمة
+
+      if (value?.data != null) {
+        favModel = FavoritesModel.fromJson(value?.data);
+        emit(ShopSuccessGetFavState());
+      } else {
+        emit(ShopErrorGetFavState('No data found'));
+      }
+    }).catchError((error) {
+      print('Error: $error');
+      emit(ShopErrorGetFavState(error.toString()));
+    });
+
+  }
+
+
 }
