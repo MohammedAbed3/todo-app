@@ -1,3 +1,4 @@
+import 'package:untitled2/Model/shop_app/ShopLoginModel.dart';
 import 'package:untitled2/Model/shop_app/home_model.dart';
 
 import '../../../Model/shop_app/change_favorites_model.dart';
@@ -44,3 +45,19 @@ class ShopErrorGetFavState extends ShopStates{
 
   ShopErrorGetFavState(this.error);
 }
+
+
+class ShopSuccessGetProfileState extends ShopStates{
+
+  ShopLoginModel? model;
+
+  ShopSuccessGetProfileState(this.model);
+}
+class ShopLoadingGetProfileState extends ShopStates{}
+class ShopErrorGetProfileState extends ShopStates{
+  final String error;
+
+  ShopErrorGetProfileState(this.error);
+}
+
+class ShopRefreshState extends ShopStates{}

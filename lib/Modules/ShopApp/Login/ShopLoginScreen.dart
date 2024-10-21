@@ -6,6 +6,7 @@ import 'package:untitled2/Modules/ShopApp/Login/cubit/cubit.dart';
 import 'package:untitled2/Modules/ShopApp/Login/cubit/state.dart';
 import 'package:untitled2/Modules/ShopApp/Register/ShopRegisterScreen.dart';
 import 'package:untitled2/shared/Components/components.dart';
+import 'package:untitled2/shared/Constains/constains.dart';
 import 'package:untitled2/shared/Networks/local/CacheHelper.dart';
 
 class ShopLoginScreen extends StatelessWidget {
@@ -26,7 +27,12 @@ class ShopLoginScreen extends StatelessWidget {
               print(state.model.status);
               print(state.model.message);
               print(state.model.data?.token);
-              CacheHelper.savaDate(key: 'token', value: state.model.data?.token).then((value) {
+              CacheHelper.savaDate(
+                  key: 'token',
+                  value: state.model.data?.token,
+              ).then((value) {
+
+                token = state.model.data?.token;
                 navgetToKill(context, ShopLayout());
               },);
               ShowSnakBar(context: context, text: '${state.model.message}');
@@ -147,7 +153,7 @@ class ShopLoginScreen extends StatelessWidget {
                                 ),
                                 defaultTextButton(
                                     function: () {
-                                      navgetTo(context, const ShopRegisterScreen());
+                                      navgetTo(context,  ShopRegisterScreen());
                                     },
                                     text: 'Register Now')
                               ],

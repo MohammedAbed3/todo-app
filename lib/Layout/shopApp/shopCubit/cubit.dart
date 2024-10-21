@@ -3,9 +3,11 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled2/Layout/shopApp/shopCubit/states.dart';
+import 'package:untitled2/Model/shop_app/ShopLoginModel.dart';
 import 'package:untitled2/Model/shop_app/categories_model.dart';
 import 'package:untitled2/Model/shop_app/get_favorites_model.dart';
 import 'package:untitled2/Model/shop_app/home_model.dart';
+import 'package:untitled2/Model/shop_app/register_model.dart';
 import 'package:untitled2/Modules/ShopApp/LayoutScarrens/Categories/CategoriesScrren.dart';
 import 'package:untitled2/Modules/ShopApp/LayoutScarrens/Favorites/FavoritesScreen.dart';
 import 'package:untitled2/Modules/ShopApp/LayoutScarrens/Products/ProductsScreen.dart';
@@ -31,6 +33,8 @@ class ShopCubit extends Cubit<ShopStates>{
   ];
 
   void changeBottom(int index){
+
+
     currentIndex = index;
     emit(ShopChangeBottomNavState());
   }
@@ -145,5 +149,33 @@ emit(ShopLoadingGetFavState());
 
   }
 
+  ShopLoginModel? profileModel;
+
+  void getProfile() {
+    emit(ShopLoadingGetProfileState());
+    DioHelper.getData(
+      url: PROFILE,
+      token: token,
+    ).then((value) {
+      print('Response Data: ${value?.data}'); // تحقق من البيانات المستلمة
+
+      if (value?.data != null) {
+        profileModel = ShopLoginModel.fromJson(value?.data);
+        emit(ShopSuccessGetProfileState(profileModel));
+        print(profileModel?.data?.name);
+      } else {
+        emit(ShopErrorGetFavState('No data found'));
+      }
+    }).catchError((error) {
+      print('Error: $error');
+      emit(ShopErrorGetProfileState(error.toString()));
+    });
+
+  }
+
+
+void refresh(){
+    emit(ShopRefreshState());
+}
 
 }
