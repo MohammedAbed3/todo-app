@@ -30,9 +30,12 @@ class ShopLoginScreen extends StatelessWidget {
               CacheHelper.savaDate(
                   key: 'token',
                   value: state.model.data?.token,
+
               ).then((value) {
 
                 token = state.model.data?.token;
+                print('new Token $token');
+
                 navgetToKill(context, ShopLayout());
               },);
               ShowSnakBar(context: context, text: '${state.model.message}');

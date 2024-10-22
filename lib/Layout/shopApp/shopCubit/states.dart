@@ -60,4 +60,4 @@ class ShopErrorGetProfileState extends ShopStates{
   ShopErrorGetProfileState(this.error);
 }
 
-class ShopRefreshState extends ShopStates{}
+class ShopLogoutState extends ShopStates{}

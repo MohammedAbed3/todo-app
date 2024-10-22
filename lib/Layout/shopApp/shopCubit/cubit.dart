@@ -35,6 +35,7 @@ class ShopCubit extends Cubit<ShopStates>{
   void changeBottom(int index){
 
 
+
     currentIndex = index;
     emit(ShopChangeBottomNavState());
   }
@@ -174,8 +175,17 @@ emit(ShopLoadingGetFavState());
   }
 
 
-void refresh(){
-    emit(ShopRefreshState());
-}
+
+
+  void logout(context) {
+
+
+
+
+
+    signOutShopApp(context);
+
+    emit(ShopLogoutState());
+  }
 
 }

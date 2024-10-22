@@ -7,34 +7,58 @@ import 'package:untitled2/Model/shop_app/ShopLoginModel.dart';
 import 'package:untitled2/shared/Components/components.dart';
 import 'package:untitled2/shared/Constains/constains.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
   var nameController = TextEditingController();
+
   var emailController = TextEditingController();
+
   var phoneController = TextEditingController();
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsFlutterBinding.ensureInitialized();
+
+    ShopCubit.get(context).getProfile();
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopCubit, ShopStates>(
       listener: (context, state) {
-        if (state is ShopLoadingGetProfileState) {
-          // هنا يمكنك إظهار مؤشر التحميل أثناء جلب البيانات
-        }
-        if (state is ShopSuccessGetProfileState) {
-          // تحميل بيانات المستخدم بعد النجاح
-          var model = ShopCubit.get(context).profileModel?.data;
-          nameController.text = model?.name ?? '';
-          emailController.text = model?.email ?? '';
-          phoneController.text = model?.phone ?? '';
-        }
+
+
       },
       builder: (context, state) {
         ShopCubit cubit = ShopCubit.get(context);
         var model = cubit.profileModel?.data;
 
-        // تحديث بيانات الحقول
-        nameController.text = model?.name ?? '';
-        emailController.text = model?.email ?? '';
-        phoneController.text = model?.phone ?? '';
+        if(model != null) {
+          print('new name${model.name}');
+          print(model.phone);
+          print(model.email);
+
+            nameController.text = model.name ?? '';
+            emailController.text = model.email ?? '';
+            phoneController.text = model.phone ?? '';
+
+
+
+
+          print(nameController.text);
+          print(emailController.text);
+          print(phoneController.text);
+
+        }
 
         return ConditionalBuilder(
           builder: (context) => Padding(
@@ -84,10 +108,13 @@ class SettingsScreen extends StatelessWidget {
                 SizedBox(height: 20),
                 defaultButton(
                   function: () {
-                    signOutShopApp(context);
-                    nameController.text ='';
-                    phoneController.text ='';
-                    emailController.text ='';
+
+                    cubit.logout(context);
+                    nameController.clear();
+                    emailController.clear();
+                    phoneController.clear();
+
+
                   },
                   text: 'Logout',
                   background: Colors.red,
@@ -95,7 +122,7 @@ class SettingsScreen extends StatelessWidget {
               ],
             ),
           ),
-          condition: cubit.profileModel != null,
+          condition: cubit.profileModel != null ,
           fallback: (context) => Center(child: CircularProgressIndicator()),
         );
       },
